@@ -1,20 +1,25 @@
 from typing import List
 
 from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain_ollama import OllamaEmbeddings
+
+
+def get_embeddings() -> OllamaEmbeddings:
+    return OllamaEmbeddings(
+        model="nomic-embed-text"
+    )
 
 
 def build_vector_store(documents: List[Document]) -> FAISS:
     """
-    Create a FAISS vector store from document chunks.
+    Create a FAISS vector store from document chunks
+    using local Ollama embeddings.
     """
     if not documents:
         raise ValueError("No documents provided to build the vector store.")
 
-    embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small"
-    )
+    embeddings = get_embeddings()
 
     vector_store = FAISS.from_documents(
         documents=documents,
@@ -46,7 +51,7 @@ def save_vector_store(
     directory: str = "data/faiss_index",
 ) -> None:
     """
-    Persist the FAISS index locally.
+    Save the FAISS index locally.
     """
     vector_store.save_local(directory)
 
@@ -57,9 +62,7 @@ def load_vector_store(
     """
     Load an existing FAISS vector store.
     """
-    embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small"
-    )
+    embeddings = get_embeddings()
 
     return FAISS.load_local(
         directory,
