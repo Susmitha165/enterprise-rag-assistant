@@ -220,6 +220,12 @@ The enterprise RAG assistant supports document ingestion, chunking,
 semantic retrieval, grounded generation, and source citations.
 ```
 
+## Demo
+
+Successful end-to-end RAG query using the local Ollama + FAISS pipeline:
+
+![RAG Query Demo](rag-query-demo.png)
+
 ## Current Status
 
 The core RAG workflow is implemented and working locally.
