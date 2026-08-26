@@ -226,6 +226,20 @@ Successful end-to-end RAG query using the local Ollama + FAISS pipeline:
 
 ![RAG Query Demo](rag-query-demo.png)
 
+## Tests
+
+Run the test suite with:
+
+```bash
+python -m pytest
+```
+
+Current result:
+
+```text
+2 passed
+```
+
 ## Current Status
 
 The core RAG workflow is implemented and working locally.
