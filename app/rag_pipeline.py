@@ -1,9 +1,8 @@
 from typing import List
 
 from langchain_core.documents import Document
-from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
-from app.config import OPENAI_API_KEY
 from app.ingestion import ingest_document
 from app.vector_store import (
     build_vector_store,
@@ -15,21 +14,18 @@ class RAGPipeline:
     def __init__(self):
         self.vector_store = None
 
-        self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
+        self.llm = ChatOllama(
+            model="llama3.2",
             temperature=0,
-            api_key=OPENAI_API_KEY,
         )
 
     def ingest(self, file_path: str) -> int:
         """
-        Load a document, chunk it, generate embeddings,
+        Load a document, chunk it, generate local embeddings,
         and build the FAISS vector store.
         """
         chunks = ingest_document(file_path)
-
         self.vector_store = build_vector_store(chunks)
-
         return len(chunks)
 
     def retrieve(
@@ -45,18 +41,16 @@ class RAGPipeline:
                 "No documents have been ingested yet."
             )
 
-        documents = search_documents(
+        return search_documents(
             vector_store=self.vector_store,
             query=query,
             k=k,
         )
 
-        return documents
-
     def answer(self, query: str) -> dict:
         """
         Retrieve relevant context and generate
-        a grounded response using the LLM.
+        a grounded response using local Ollama.
         """
         if not query.strip():
             raise ValueError("Question cannot be empty.")
