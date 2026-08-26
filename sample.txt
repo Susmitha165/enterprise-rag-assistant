@@ -1,0 +1,1 @@
+Our enterprise RAG assistant supports document ingestion, chunking, semantic retrieval, grounded generation, and source citations.
